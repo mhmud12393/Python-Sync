@@ -46,21 +46,21 @@ while True:
 	for filename in os.listdir(args["source_folder"]):
 		filePath = os.path.join(args["source_folder"], filename)
 		replicaFilePath = os.path.join(args["replica_folder"], filename)
+				
+		# If the file is a file then simply copy the file
+		if os.path.isfile(filePath):
+			if os.path.exists(replicaFilePath) == False:
+				print("[INFO] Copying the file {}".format(filename))
+				shutil.copyfile(filePath, replicaFilePath)
+				f.write("{}\tcopy\t{}\n".format(time.time(), filename, encoding="utf-8"))
 
 		# If the file is a directory then copy the directory recursively
-		if os.path.isdir(filePath):
-			if os.path.exists(replicaFilePath) == False:
+		elif os.path.isdir(filePath):
+			if os.path.exists(replicaFilePath) == True:
 				print("[INFO] Creating the directory {}".format(filename, encoding="utf-8"))
 				os.mkdir(replicaFilePath)
 				f.write("{}\tcreate\t{}\n".format(time.time(), filename, encoding="utf-8"))
 				shutil.copytree(filePath, replicaFilePath)
-				f.write("{}\tcopy\t{}\n".format(time.time(), filename, encoding="utf-8"))
-
-		# If the file is a file then simply copy the file
-		elif os.path.isfile(filePath):
-			if os.path.exists(replicaFilePath) == False:
-				print("[INFO] Copying the file {}".format(filename))
-				shutil.copyfile(filePath, replicaFilePath)
 				f.write("{}\tcopy\t{}\n".format(time.time(), filename, encoding="utf-8"))
 
 	# Remove files from the replica folder which are not present in the source folder
@@ -70,7 +70,7 @@ while True:
 
 		# If the file is a directory then remove the directory recursively
 		if os.path.isdir(filePath):
-			if os.path.exists(sourceFilePath) == False:
+			if os.path.exists(sourceFilePath) == True:
 				print("[INFO] Deleting the directory {}".format(filename), encoding="utf-8")
 				shutil.rmtree(filePath)
 				f.write("{}\tdelete\t{}\n".format(time.time(), filename, encoding="utf-8"))
