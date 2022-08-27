@@ -15,5 +15,5 @@ should be modified to exactly match content of the source folder;
 output;
 
 4. Folder paths, synchronization interval and log file path should be provided using the
-command line arguments.
+command line arguments. 
 
