@@ -3,7 +3,12 @@
 
   Commands(CMD): 
   python Sync.py -s C:....\source -r C:....\replica -i 10  -l C:....\Log_file.txt
-  
+    
+  -s = Source Folder
+  -r = Replica Folder
+  -i = Interval
+  -l = Log File
+
 Requirements:
 
 1. Synchronization must be one-way: after the synchronization content of the replica folder
