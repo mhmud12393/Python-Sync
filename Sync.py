@@ -85,7 +85,7 @@ while True:
 			if os.path.exists(sourceFilePath) == False:
 				print("[INFO] Removing the directory {}".format(filename))
 				shutil.rmtree(filePath)
-				f.write("{}\tremove\t{}\n".format(time.time(), filename))
+				f.write("{}\tremove\t{}\n".format(time.time(), filename.encode('ascii', errors='ignore')))
 		# If the file is a file then remove the file
 		elif os.path.isfile(filePath):
 			if os.path.exists(sourceFilePath) == False:
@@ -95,7 +95,7 @@ while True:
 		# If the file is neither a file, a directory or a symbolic link then print an error message
 		else:
 			print("[ERROR]")
-			f.write("{}\tno_op\t{}\n".format(time.time(), filename))
+			f.write("{}\tno_op\t{}\n".format(time.time(), filename.encode('ascii', errors='ignore')))
 
 	# Sleep for interval seconds
 	time.sleep(int(args["interval"]))
