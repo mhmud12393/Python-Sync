@@ -3,6 +3,7 @@
 
   Commands(CMD): 
   python Sync.py -s C:....\source -r C:....\replica -i 10  -l C:....\Log_file.txt
+  
 Requirements:
  Synchronization must be one-way: after the synchronization content of the replica folder
 should be modified to exactly match content of the source folder;
