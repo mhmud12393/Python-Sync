@@ -52,35 +52,49 @@ while True:
 			if os.path.exists(replicaFilePath) == False:
 				print("[INFO] Copying the file {}".format(filename))
 				shutil.copyfile(filePath, replicaFilePath)
-				f.write("{}\tcopy\t{}\n".format(time.time(), filename, encoding="utf-8"))
+				f.write("{}\tcopy\t{}\n".format(time.time(), filename))
 
 		# If the file is a directory then copy the directory recursively
 		elif os.path.isdir(filePath):
 			if os.path.exists(replicaFilePath) == False:
-				print("[INFO] Creating the directory {}".format(filename, encoding="utf-8"))
+				print("[INFO] Creating the directory {}".format(filename))
 				os.mkdir(replicaFilePath)
-				f.write("{}\tcreate\t{}\n".format(time.time(), filename, encoding="utf-8"))
-				shutil.copytree(filePath, replicaFilePath, dirs_exist_ok=True)
-				f.write("{}\tcopy\t{}\n".format(time.time(), filename, encoding="utf-8"))
+				for subfilename in os.listdir(filePath):
+					subfilePath = os.path.join(filePath, subfilename)
+					subreplicaFilePath = os.path.join(replicaFilePath, subfilename)
+					if os.path.isfile(subfilePath):
+						shutil.copyfile(subfilePath, subreplicaFilePath)
+					elif os.path.isdir(subfilePath):
+						os.mkdir(subreplicaFilePath)
+						for subsubfilename in os.listdir(subfilePath):
+							subsubfilePath = os.path.join(subfilePath, subsubfilename)
+							subsubreplicaFilePath = os.path.join(subreplicaFilePath, subsubfilename)
+
+		# If the file is neither a file, a directory or a symbolic link then print an error message
+		else:
+			print("[ERROR]")
 
 	# Remove files from the replica folder which are not present in the source folder
 	for filename in os.listdir(args["replica_folder"]):
-		filePath = os.path.join(args["replica_folder"], filename, encoding="utf-8")
-		sourceFilePath = os.path.join(args["source_folder"], filename, encoding="utf-8")
+		filePath = os.path.join(args["replica_folder"], filename)
+		sourceFilePath = os.path.join(args["source_folder"], filename)
 
 		# If the file is a directory then remove the directory recursively
 		if os.path.isdir(filePath):
-			if os.path.exists(sourceFilePath) == True:
-				print("[INFO] Deleting the directory {}".format(filename), encoding="utf-8")
+			if os.path.exists(sourceFilePath) == False:
+				print("[INFO] Removing the directory {}".format(filename))
 				shutil.rmtree(filePath)
-				f.write("{}\tdelete\t{}\n".format(time.time(), filename, encoding="utf-8"))
-
-		# If the file is a file then simply delete the file
+				f.write("{}\tremove\t{}\n".format(time.time(), filename))
+		# If the file is a file then remove the file
 		elif os.path.isfile(filePath):
 			if os.path.exists(sourceFilePath) == False:
-				print("[INFO] Deleting the file {}".format(filename), encoding="utf-8")
-				os.unlink(filePath)
-				f.write("{}\tdelete\t{}\n".format(time.time(), filename, encoding="utf-8"))
+				print("[INFO] Removing the file {}".format(filename))
+				os.remove(filePath)
+				f.write("{}\tremove\t{}\n".format(time.time(), filename))
+		# If the file is neither a file, a directory or a symbolic link then print an error message
+		else:
+			print("[ERROR]")
+			f.write("{}\tno_op\t{}\n".format(time.time(), filename))
 
 	# Sleep for interval seconds
 	time.sleep(int(args["interval"]))
