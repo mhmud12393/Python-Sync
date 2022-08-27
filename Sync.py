@@ -99,3 +99,7 @@ while True:
 
 	# Sleep for interval seconds
 	time.sleep(int(args["interval"]))
+	f.flush()
+	os.fsync(f.fileno())
+	f.close()
+	f = open(args["log_file"], "a")
