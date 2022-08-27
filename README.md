@@ -16,4 +16,3 @@ output;
 
 4. Folder paths, synchronization interval and log file path should be provided using the
 command line arguments. 
-
