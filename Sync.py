@@ -1,4 +1,5 @@
 import argparse
+import encodings
 import os
 import shutil
 import time
@@ -52,7 +53,7 @@ while True:
 			if os.path.exists(replicaFilePath) == False:
 				print("[INFO] Copying the file {}".format(filename))
 				shutil.copyfile(filePath, replicaFilePath)
-				f.write("{}\tcopy\t{}\n".format(time.time(), filename))
+				f.write("{}\tcopy\t{}\n".format(time.time(), filename.encode('ascii', errors='ignore')))
 
 		# If the file is a directory then copy the directory recursively
 		elif os.path.isdir(filePath):
@@ -90,7 +91,7 @@ while True:
 			if os.path.exists(sourceFilePath) == False:
 				print("[INFO] Removing the file {}".format(filename))
 				os.remove(filePath)
-				f.write("{}\tremove\t{}\n".format(time.time(), filename))
+				f.write("{}\tremove\t{}\n".format(time.time(), filename.encode('ascii', errors='ignore')))
 		# If the file is neither a file, a directory or a symbolic link then print an error message
 		else:
 			print("[ERROR]")
