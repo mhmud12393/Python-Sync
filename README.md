@@ -11,4 +11,5 @@
   -i = Interval
   
   -l = Log File
-
+-------------------
+A program that syncs 2 folders and replicates all changes made whilst logginh all modifications.
